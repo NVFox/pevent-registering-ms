@@ -26,9 +26,26 @@ public class Log {
     @Indexed(direction = IndexDirection.DESCENDING)
     private LocalDateTime timestamp = LocalDateTime.now();
 
+    public static Log info(String message) {
+        Log log = new Log();
+
+        log.setLevel(Level.INFO);
+        log.setMessage(message);
+
+        return log;
+    }
+
+    public static Log error(String message) {
+        Log log = new Log();
+
+        log.setLevel(Level.ERROR);
+        log.setMessage(message);
+
+        return log;
+    }
+
     public enum Level {
         INFO,
-        WARN,
         ERROR
     }
 }
