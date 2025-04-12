@@ -24,7 +24,7 @@ public class Log {
     private String message;
 
     @Indexed(direction = IndexDirection.DESCENDING)
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp = LocalDateTime.now();
 
     public enum Level {
         INFO,

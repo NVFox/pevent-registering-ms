@@ -22,5 +22,5 @@ public class Event {
     private String description;
 
     @Indexed(direction = IndexDirection.DESCENDING)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 }
