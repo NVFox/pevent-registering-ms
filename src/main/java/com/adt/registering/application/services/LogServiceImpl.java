@@ -5,6 +5,7 @@ import com.adt.registering.domain.repositories.LogRepository;
 import com.adt.registering.domain.repositories.filters.LogFilter;
 import com.adt.registering.domain.services.LogService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,15 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LogServiceImpl implements LogService {
     private final LogRepository logRepository;
 
     @Override
     public Mono<Log> create(Log log) {
-        return logRepository.save(log);
+        return logRepository.save(log)
+                .doOnSuccess(saved -> LogServiceImpl.log.info("Log created: {}", log))
+                .doOnError(error -> LogServiceImpl.log.error("Error creating log: {}", log, error));
     }
 
     @Override
