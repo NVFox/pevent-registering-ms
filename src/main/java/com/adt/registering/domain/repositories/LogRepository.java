@@ -1,11 +1,12 @@
 package com.adt.registering.domain.repositories;
 
 import com.adt.registering.domain.entities.Log;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import reactor.core.publisher.Flux;
+import com.adt.registering.domain.repositories.filters.LogFilter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-
-public interface LogRepository extends ReactiveMongoRepository<Log, String> {
-    Flux<Log> findByLevelAndTimestampBetween(Log.Level level, LocalDateTime start, LocalDateTime end);
+public interface LogRepository {
+    Mono<Log> save(Log log);
+    Mono<Page<Log>> findBy(LogFilter filter, Pageable pageable);
 }

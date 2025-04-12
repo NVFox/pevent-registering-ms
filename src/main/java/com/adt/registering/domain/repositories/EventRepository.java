@@ -1,11 +1,12 @@
 package com.adt.registering.domain.repositories;
 
 import com.adt.registering.domain.entities.Event;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import reactor.core.publisher.Flux;
+import com.adt.registering.domain.repositories.filters.EventFilter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-
-public interface EventRepository extends ReactiveMongoRepository<Event, String> {
-    Flux<Event> findByTypeAndCreatedAtBetween(String type, LocalDateTime start, LocalDateTime end);
+public interface EventRepository {
+    Mono<Event> save(Event event);
+    Mono<Page<Event>> findBy(EventFilter filter, Pageable pageable);
 }
