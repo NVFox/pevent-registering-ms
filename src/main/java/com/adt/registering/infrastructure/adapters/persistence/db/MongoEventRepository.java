@@ -1,4 +1,4 @@
-package com.adt.registering.infrastructure.persistence.db;
+package com.adt.registering.infrastructure.adapters.persistence.db;
 
 import com.adt.registering.domain.entities.Event;
 import com.adt.registering.domain.repositories.EventRepository;

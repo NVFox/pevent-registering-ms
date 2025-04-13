@@ -1,4 +1,4 @@
-package com.adt.registering.infrastructure.messaging;
+package com.adt.registering.infrastructure.adapters.messaging;
 
 import com.adt.registering.application.providers.MessagingProvider;
 import lombok.RequiredArgsConstructor;
