@@ -7,9 +7,11 @@ import com.adt.registering.application.queries.GetEventsByQuery;
 import com.adt.registering.application.queries.handlers.GetEventsByQueryHandler;
 import com.adt.registering.domain.entities.Event;
 import com.adt.registering.domain.repositories.filters.EventFilter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -21,12 +23,13 @@ public class EventController {
     private final GetEventsByQueryHandler getEventsByQueryHandler;
 
     @PostMapping
-    public Mono<Event> createEvent(@RequestBody CreateEventCommand command) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<Event> createEvent(@RequestBody @Valid CreateEventCommand command) {
         return createEventCommandHandler.handle(command);
     }
 
     @GetMapping
-    public Mono<Page<Event>> getEventsBy(EventQueryParamsDTO queryParams) {
+    public Mono<Page<Event>> getEventsBy(@Valid EventQueryParamsDTO queryParams) {
         EventFilter filter = new EventFilter(
                 queryParams.getType(),
                 queryParams.getFrom(),
