@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 public class LogServiceImpl implements LogService {
     private final MessagingProvider messagingProvider;
 
-    @Value("${messaging.notifications-logs.queue-name}")
-    private String logQueue;
+    @Value("${messaging.notifications-logs.channel-name}")
+    private String logChannel;
 
     @Override
     public void log(Log log) {
-        messagingProvider.publish(logQueue, log);
+        messagingProvider.publish(logChannel, log);
     }
 }

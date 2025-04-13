@@ -1,6 +1,5 @@
 package com.adt.registering.infrastructure.config;
 
-import com.adt.registering.application.constants.MessagingConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -21,8 +20,8 @@ public class MessagingConfig {
     }
 
     @Bean
-    public Queue eventQueue(@Value("${messaging.notifications-events.queue-name}") String eventQueue) {
-        return new Queue(eventQueue, true);
+    public Queue notificationQueue(@Value("${messaging.notifications.queue-name}") String notificationQueue) {
+        return new Queue(notificationQueue, true);
     }
 
     @Bean
@@ -31,18 +30,22 @@ public class MessagingConfig {
     }
 
     @Bean
-    public Binding logBinding(@Qualifier("logQueue") Queue logQueue, Exchange notificationsExchange) {
+    public Binding logBinding(@Qualifier("logQueue") Queue logQueue,
+                              Exchange notificationsExchange,
+                              @Value("${messaging.notifications-logs.channel-name}") String channelName) {
         return BindingBuilder.bind(logQueue)
                 .to(notificationsExchange)
-                .with(MessagingConstants.LOGS_CHANNEL_NAME)
+                .with(channelName)
                 .noargs();
     }
 
     @Bean
-    public Binding eventBinding(@Qualifier("eventQueue") Queue eventQueue, Exchange notificationsExchange) {
-        return BindingBuilder.bind(eventQueue)
+    public Binding notificationBinding(@Qualifier("notificationQueue") Queue notificationQueue,
+                                       Exchange notificationsExchange,
+                                       @Value("${messaging.notifications.channel-name}") String channelName) {
+        return BindingBuilder.bind(notificationQueue)
                 .to(notificationsExchange)
-                .with(MessagingConstants.EVENTS_CHANNEL_NAME)
+                .with(channelName)
                 .noargs();
     }
 

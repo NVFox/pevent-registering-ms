@@ -15,7 +15,7 @@ public class RabbitMessagingProvider implements MessagingProvider {
     private String topic;
 
     @Override
-    public void publish(String queue, Object message) {
-        rabbitTemplate.convertAndSend(topic, queue, message);
+    public void publish(String channel, Object message) {
+        rabbitTemplate.convertAndSend(topic, channel, message);
     }
 }

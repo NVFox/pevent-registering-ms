@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class NotificationServiceImpl implements NotificationService {
     private final MessagingProvider messagingProvider;
 
-    @Value("${messaging.notifications.queue-name}")
-    private String notificationsQueue;
+    @Value("${messaging.notifications.channel-name}")
+    private String notificationChannel;
 
     @Override
     public void notify(Event event) {
-        messagingProvider.publish(notificationsQueue, event);
+        messagingProvider.publish(notificationChannel, event);
     }
 }
