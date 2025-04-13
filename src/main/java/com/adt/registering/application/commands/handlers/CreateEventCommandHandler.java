@@ -22,22 +22,16 @@ public class CreateEventCommandHandler {
         event.setType(command.type());
         event.setDescription(command.description());
 
-        return logService.create(Log.info("** Starting event registration **"))
-                .then(eventService.create(event))
-                .publishOn(Schedulers.boundedElastic())
+        logService.log(Log.info("** Starting event registration **"));
+
+        return eventService.create(event)
                 .doOnError(error ->
-                    log(Log.error("Error creating event: " + error.getMessage() +
+                        logService.log(Log.error("Error creating event: " + error.getMessage() +
                             " - with command: " + command)))
                 .doOnSuccess(saved ->
-                    log(Log.info("Event created: " + saved.getId() +
+                        logService.log(Log.info("Event created: " + saved.getId() +
                             " - with command: " + command)))
                 .doFinally(signalType ->
-                        log(Log.info("** Event registration completed with signal " + signalType + " **")));
-    }
-
-    private void log(Log log) {
-        logService.create(log)
-                .retry(3)
-                .subscribe();
+                        logService.log(Log.info("** Event registration completed with signal " + signalType + " **")));
     }
 }

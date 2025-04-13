@@ -18,20 +18,15 @@ public class GetEventsByQueryHandler {
     private final LogService logService;
 
     public Mono<Page<Event>> handle(GetEventsByQuery query) {
-        return logService.create(Log.info("** Starting event query with filters: " + query.filter() + " **"))
-                .then(eventService.findBy(query.filter(), query.pageable()))
+        logService.log(Log.info("** Starting event query with filters: " + query.filter() + " **"));
+
+        return eventService.findBy(query.filter(), query.pageable())
                 .publishOn(Schedulers.boundedElastic())
                 .doOnError(error ->
-                        log(Log.error("Error querying events: " + error.getMessage())))
+                        logService.log(Log.error("Error querying events: " + error.getMessage())))
                 .doOnSuccess(saved ->
-                        log(Log.info("Events retrieved successfully (" + saved.getTotalElements() + ")")))
+                        logService.log(Log.info("Events retrieved successfully (" + saved.getTotalElements() + ")")))
                 .doFinally(signalType ->
-                        log(Log.info("** Event query completed with signal " + signalType + " **")));
-    }
-
-    private void log(Log log) {
-        logService.create(log)
-                .retry(3)
-                .subscribe();
+                        logService.log(Log.info("** Event query completed with signal " + signalType + " **")));
     }
 }
