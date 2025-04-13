@@ -1,31 +1,24 @@
 package com.adt.registering.application.services;
 
+import com.adt.registering.application.providers.MessagingProvider;
 import com.adt.registering.domain.entities.Log;
-import com.adt.registering.domain.repositories.LogRepository;
-import com.adt.registering.domain.repositories.filters.LogFilter;
 import com.adt.registering.domain.services.LogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class LogServiceImpl implements LogService {
-    private final LogRepository logRepository;
+    private final MessagingProvider messagingProvider;
+
+    @Value("${messaging.notifications-logs.queue-name}")
+    private String logQueue;
 
     @Override
-    public Mono<Log> create(Log log) {
-        return logRepository.save(log)
-                .doOnSuccess(saved -> LogServiceImpl.log.info("Log created: {}", log))
-                .doOnError(error -> LogServiceImpl.log.error("Error creating log: {}", log, error));
-    }
-
-    @Override
-    public Mono<Page<Log>> findBy(LogFilter filter, Pageable pageable) {
-        return logRepository.findBy(filter, pageable);
+    public void log(Log log) {
+        messagingProvider.publish(logQueue, log);
     }
 }
