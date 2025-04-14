@@ -1,6 +1,6 @@
 package com.adt.registering.infrastructure.adapters.messaging;
 
-import com.adt.registering.application.providers.MessagingPublisher;
+import com.adt.registering.application.providers.MessagePublisher;
 import com.adt.registering.domain.entities.Log;
 import com.adt.registering.domain.services.LogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import reactor.rabbitmq.Sender;
 
 @Service
 @RequiredArgsConstructor
-public class RabbitMessagingPublisher implements MessagingPublisher {
+public class RabbitMessagePublisher implements MessagePublisher {
     private final Sender sender;
     private final ObjectMapper objectMapper;
 
