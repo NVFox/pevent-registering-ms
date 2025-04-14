@@ -1,10 +1,9 @@
 package com.adt.registering.infrastructure.adapters.messaging;
 
 import com.adt.registering.application.providers.MessagePublisher;
-import com.adt.registering.domain.entities.Log;
-import com.adt.registering.domain.services.LogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,11 +13,10 @@ import reactor.rabbitmq.Sender;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RabbitMessagePublisher implements MessagePublisher {
     private final Sender sender;
     private final ObjectMapper objectMapper;
-
-    private final LogService logService;
 
     @Value("${messaging.notifications.topic-name}")
     private String topic;
@@ -36,11 +34,10 @@ public class RabbitMessagePublisher implements MessagePublisher {
             ));
 
             sender.sendWithPublishConfirms(outbound)
-                    .doOnError(error ->
-                            logService.log(Log.error("Error publishing message: " + error.getMessage())))
-                    .subscribe();
+                    .subscribe(null, e ->
+                        log.error("Error publishing message: {}", e.getMessage(), e));
         } catch (Exception e) {
-            logService.log(Log.error("Error serializing message: " + e.getMessage()));
+            log.error("Error serializing message: {}", e.getMessage(), e);
         }
     }
 }

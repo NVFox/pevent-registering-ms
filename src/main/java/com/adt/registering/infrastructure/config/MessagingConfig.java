@@ -1,6 +1,7 @@
 package com.adt.registering.infrastructure.config;
 
 import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.amqp.core.*;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.rabbitmq.RabbitFlux;
@@ -21,6 +23,7 @@ import java.util.Objects;
 @Configuration
 public class MessagingConfig {
     @Autowired
+    @Lazy
     private Mono<Connection> connectionMono;
 
     @Autowired
@@ -43,7 +46,7 @@ public class MessagingConfig {
 
     @Bean
     public Mono<Connection> connectionMono(RabbitProperties rabbitProperties) {
-        com.rabbitmq.client.ConnectionFactory connectionFactory = new com.rabbitmq.client.ConnectionFactory();
+        ConnectionFactory connectionFactory = new ConnectionFactory();
 
         connectionFactory.setHost(rabbitProperties.getHost());
         connectionFactory.setPort(rabbitProperties.getPort());
@@ -52,7 +55,7 @@ public class MessagingConfig {
         connectionFactory.useNio();
 
         return Mono.fromCallable(() -> connectionFactory
-                .newConnection("reactive-notifications-rabbitmq")).cache();
+                .newConnection("reactive-events-rabbitmq")).cache();
     }
 
     @Bean
