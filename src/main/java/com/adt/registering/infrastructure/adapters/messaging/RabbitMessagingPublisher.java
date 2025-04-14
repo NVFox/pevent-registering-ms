@@ -1,6 +1,6 @@
 package com.adt.registering.infrastructure.adapters.messaging;
 
-import com.adt.registering.application.providers.MessagingProvider;
+import com.adt.registering.application.providers.MessagingPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RabbitMessagingProvider implements MessagingProvider {
+public class RabbitMessagingPublisher implements MessagingPublisher {
     private final RabbitTemplate rabbitTemplate;
 
     @Value("${messaging.notifications.topic-name}")

@@ -1,5 +1,5 @@
 package com.adt.registering.application.providers;
 
-public interface MessagingProvider {
+public interface MessagingPublisher {
     void publish(String channel, Object message);
 }

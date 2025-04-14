@@ -1,6 +1,6 @@
 package com.adt.registering.application.services;
 
-import com.adt.registering.application.providers.MessagingProvider;
+import com.adt.registering.application.providers.MessagingPublisher;
 import com.adt.registering.domain.entities.Log;
 import com.adt.registering.domain.services.LogService;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class LogServiceImpl implements LogService {
-    private final MessagingProvider messagingProvider;
+    private final MessagingPublisher messagingPublisher;
 
     @Value("${messaging.notifications-logs.channel-name}")
     private String logChannel;
 
     @Override
     public void log(Log log) {
-        messagingProvider.publish(logChannel, log);
+        messagingPublisher.publish(logChannel, log);
     }
 }
