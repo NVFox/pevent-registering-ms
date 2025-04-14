@@ -1,7 +1,7 @@
 package com.adt.registering.domain.services;
 
-import com.adt.registering.domain.entities.Event;
+import com.adt.registering.domain.entities.Notification;
 
 public interface NotificationService {
-    void notify(Event event);
+    void notify(Notification notification);
 }

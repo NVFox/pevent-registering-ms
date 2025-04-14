@@ -1,7 +1,7 @@
 package com.adt.registering.application.services;
 
 import com.adt.registering.application.providers.MessagingPublisher;
-import com.adt.registering.domain.entities.Event;
+import com.adt.registering.domain.entities.Notification;
 import com.adt.registering.domain.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ public class NotificationServiceImpl implements NotificationService {
     private String notificationChannel;
 
     @Override
-    public void notify(Event event) {
-        messagingPublisher.publish(notificationChannel, event);
+    public void notify(Notification notification) {
+        messagingPublisher.publish(notificationChannel, notification);
     }
 }
